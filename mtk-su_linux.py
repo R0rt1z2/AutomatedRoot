@@ -4,7 +4,8 @@ import subprocess
 # By R0rt1z2
 # All the credits goes to diplomatic for create his excellent MTK-SU!
 
-#set null variables
+#set supported chipsets
+supported = ['mt81', 'mt67']
 
 def menu():
         """
@@ -36,97 +37,61 @@ while True:
              with open('device.txt') as myfile:
                device = myfile.read()
              subprocess.call("adb shell getprop ro.hardware > platform.txt",shell=True)
-             with open('platform.txt') as myfile:
-               platform = myfile.read()
+             with open('platform.txt', 'r') as myfile:
+               platform = myfile.read(4)
+             subprocess.call("adb shell getprop ro.hardware > platform2.txt",shell=True)
+             with open('platform2.txt') as myfile:
+               platform2 = myfile.read()
              subprocess.call("adb shell getprop ro.product.cpu.abi > arch.txt",shell=True)
              with open('arch.txt') as myfile:
                arch = myfile.read()
              subprocess.call("adb shell getprop ro.build.version.release > android.txt",shell=True)
              with open('android.txt') as myfile:
                android = myfile.read()
+             subprocess.call("adb shell getprop ro.product.manufacturer > brand.txt",shell=True)
+             with open('brand.txt') as myfile:
+               brand = myfile.read()
+             subprocess.call("adb shell getenforce > selinux.txt",shell=True)
+             with open('selinux.txt') as myfile:
+               selinux = myfile.read()
+             subprocess.call("adb shell pm list packages | grep supersu > supersu.txt",shell=True)
+             with open('selinux.txt') as myfile:
+               supersu = myfile.read()
              print("Device: " + device)
+             print("Brand: " + brand)
              print("ARCH: " + arch)
-             print("Platform: " + platform)
+             print("Platform: " + platform2)
              print("Android: " + android)
+             print("SELinux status: " + selinux)
              print("--------------------------------------")
+             if platform in ('mt81', 'mt67'):
+              if platform in set(supported):
+               pass
+             else:
+               wait = input("Incompatible CPU! BYE!")
+               break
              if "enforcing" in verity:
                  print("Sorry! Your device seems to have DM-Verity, this method will not work. Exiting...")
                  break
              elif " " in verity:
                  continue
              # ty t0x1cSH
-             if "mt6582" in platform:
-                 print("Incompatible CPU, exiting")
-                 break
-             elif "mt6580" in platform:
-                 print("Incompatible CPU, exiting")
-                 break
-             elif "mt6572" in platform:
-                 print("Incompatible CPU, exiting")
-                 break
-             elif "mt8127" in platform:
-                 print("Incompatible CPU, exiting")
-                 break
-             elif "mt6592" in platform:
-                 print("Incompatible CPU, exiting")
-                 break
-             elif "mt8695" in platform:
-                 print("Incompatible CPU, exiting")
-                 break
-             elif "mt8123" in platform:
-                 print("Incompatible CPU, exiting")
-                 break
-             elif "mt6577" in platform:
-                 print("Incompatible CPU, exiting")
-                 break
-             elif "mt6589" in platform:
-                 print("Incompatible CPU, exiting")
-                 break
-             elif "mt8121" in platform:
-                 print("Incompatible CPU, exiting")
-                 break
-             elif "mt8125" in platform:
-                 print("Incompatible CPU, exiting")
-                 break
-             elif "mt8135" in platform:
-                 print("Incompatible CPU, exiting")
-                 break
-             elif "mt8389" in platform:
-                 print("Incompatible CPU, exiting")
-                 break
-             elif "mt6582v" in platform:
-                 print("Incompatible CPU, exiting")
-                 break
-             elif "mt6592v" in platform:
-                 print("Incompatible CPU, exiting")
-                 break
-             elif "mt6582t" in platform:
-                 print("Incompatible CPU, exiting")
-                 break
-             elif "mt6592t" in platform:
-                 print("Incompatible CPU, exiting")
-                 break
-             elif "mt8135v" in platform:
-                 print("Incompatible CPU, exiting")
-                 break
-             elif "mt8317" in platform:
-                 print("Incompatible CPU, exiting")
-                 break
-             elif "mt8317t" in platform:
-                 print("Incompatible CPU, exiting")
-                 break
              if "arm64-v8a" in arch:
-                print("--------------------------------------")
                 print("Detected arm64 arch.. Pushing arm64 mtk-su & files")
                 subprocess.call("adb push arm64/mtk-su arm64/root.sh arm64/su arm64/supolicy arm64/libsupol.so /data/local/tmp",shell=True)
                 print("--------------------------------------")
                 print("Pushed files succsefully!")
-                print("Rooting the device...")
+                print("--------------------------------------")
+                print("Installing SuperSU...")
                 subprocess.call("adb install files/SuperSU.apk",shell=True)
+                print("--------------------------------------")
+                print("Starting Root Process...")
                 subprocess.call("adb shell chmod 755 /data/local/tmp/mtk-su",shell=True)
                 subprocess.call("adb shell chmod 755 /data/local/tmp/root.sh",shell=True)
                 subprocess.call('adb shell /data/local/tmp/mtk-su -c "/data/local/tmp/root.sh"',shell=True)
+                print("--------------------------------------")
                 wait = input("PRESS ENTER TO CONTINUE.")
+                print("--------------------------------------")
                 os.system('clear')
              # ty t0x1cSH
              elif "armeabi-v7a" in arch:
@@ -134,12 +99,17 @@ while True:
                 subprocess.call("adb push arm/mtk-su arm/root.sh arm/su arm/supolicy arm/libsupol.so /data/local/tmp",shell=True)
                 print("--------------------------------------")
                 print("Pushed files succsefully!")
-                print("Rooting the device...")
+                print("--------------------------------------")
+                print("Installing SuperSU...")
                 subprocess.call("adb install files/SuperSU.apk",shell=True)
+                print("--------------------------------------")
+                print("Starting Root Process...")
                 subprocess.call("adb shell chmod 755 /data/local/tmp/mtk-su",shell=True)
                 subprocess.call("adb shell chmod 755 /data/local/tmp/root.sh",shell=True)
                 subprocess.call('adb shell /data/local/tmp/mtk-su -c "/data/local/tmp/root.sh"',shell=True)
-
+                print("--------------------------------------")
+                wait = input("PRESS ENTER TO CONTINUE.")
+                print("--------------------------------------")
 
 
         elif option=="2":

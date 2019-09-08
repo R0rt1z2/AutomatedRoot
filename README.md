@@ -1,5 +1,27 @@
-# AutomatedRoot
-Automated Root Script for MTK ARM64 based chipsets.
-MTK-SU in arm/arm64 is proprietary from @diplomatic. Thanks!
-Root files inside arm/arm64 are proprietary from chainfire.
-Thanks to @t0x1cSH for his little help with the script.
+MTK-SU AUTOMATED ROOT v4.
+
+**Requeriments:**
+* Python 3
+
+**Download Python 3**
+* Windows: https://www.python.org/ftp/python/3.7.4/python-3.7.4-amd64.exe
+* Ubuntu: sudo apt install python3
+
+**How to use the tool?**
+* Linux users: chmod a+x MTK-SU.sh and ./MTK-SU.sh and profit.
+* Windows users: click on MTK-SU.bat and profit.
+
+**The tool is not detecting python on Windows?**
+* Copy all the tool and his contents to the python folder and execute the .bat.
+
+**Thanks to:**
+* diplomatic for create his MTK-SU!
+* t0x1cSH for the little help with the script.
+* stackoverflow for his help with script lol.
+
+**Source code:**
+* GitHub: https://github.com/R0rt1z2/AutomatedRoot
+
+Hope you guys enjoy the tool!
+Regards!
+R0rt1z2.

@@ -1,8 +1,27 @@
-This is the Automated MTK-SU V4. 
-For run it you will need to install Python3. 
-If you are running on Windows, and you can't run the script, place his folders and scripts in the Python Folder (C/Program Files/Python).
-If you are in linux chmod a+x the .sh file and execute it.
-If you are in Windows, execute the .bat and the tool will came up.
-Hope this tool is useful! 
+MTK-SU AUTOMATED v4.
+
+Requeriments:
+- Python 3
+
+Download Python 3
+- Windows: https://www.python.org/ftp/python/3.7.4/python-3.7.4-amd64.exe
+- Ubuntu: sudo apt install python3
+
+How to use the tool?
+- Linux users: chmod a+x MTK-SU.sh and ./MTK-SU.sh and profit.
+- Windows users: click on MTK-SU.bat and profit.
+
+The tool is not detecting python on Windows?
+- Copy all the tool and his contents to the python folder and execute the .bat.
+
+Thanks to:
+- diplomatic for create his MTK-SU!
+- t0x1cSH for the little help with the script.
+- stackoverflow for his help with script lol.
+
+Source code:
+-  GitHub: https://github.com/R0rt1z2/AutomatedRoot
+
+Hope you guys enjoy the tool!
 Regards!
 R0rt1z2.
