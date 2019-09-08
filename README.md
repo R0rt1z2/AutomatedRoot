@@ -19,9 +19,6 @@ MTK-SU AUTOMATED ROOT v4.
 * t0x1cSH for the little help with the script.
 * stackoverflow for his help with script lol.
 
-**Source code:**
-* GitHub: https://github.com/R0rt1z2/AutomatedRoot
-
 Hope you guys enjoy the tool!
 Regards!
 R0rt1z2.
