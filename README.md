@@ -11,6 +11,12 @@ MTK-SU AUTOMATED ROOT v4.
 * Linux users: chmod a+x MTK-SU.sh and ./MTK-SU.sh and profit.
 * Windows users: click on MTK-SU.bat and profit.
 
+**Available options**
+* Root the device. (System-mode using SuperSU)
+* Spawn a root shell. (Using diplomatic's mtk-su)
+* Unroot the device.
+* Bootless root (Soon...)
+
 **The tool is not detecting python on Windows?**
 * Copy all the tool and his contents to the python folder and execute the .bat.
 
@@ -18,7 +24,3 @@ MTK-SU AUTOMATED ROOT v4.
 * diplomatic for create his MTK-SU!
 * t0x1cSH for the little help with the script.
 * stackoverflow for his help with script lol.
-
-Hope you guys enjoy the tool!
-Regards!
-R0rt1z2.

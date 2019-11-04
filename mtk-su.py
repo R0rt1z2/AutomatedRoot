@@ -1,11 +1,10 @@
 import os
 import subprocess
+import time
+from subprocess import Popen, PIPE, DEVNULL, STDOUT, check_call
 
 # By R0rt1z2
 # All the credits goes to diplomatic for create his excellent MTK-SU!
-
-#set supported chipsets
-supported = ['mt81', 'mt67']
 
 def menu():
         """
@@ -15,7 +14,8 @@ def menu():
         print("\t Big thanks to diplomatic")
         print("\t1 - Root the Device")
         print("\t2 - Spawn Root Shell")
-        print("\t3 - Exit")
+        print("\t3 - Unroot the device")
+        print("\t4 - Exit")
 
 while True:
         #show menu
@@ -25,47 +25,36 @@ while True:
         option = input("Select an option >> ")
 
         if option=="1":
+             # Clean before continue
+             os.system("cls")
              print("Detecting device information....")
              print("--------------------------------------")
-             subprocess.call("adb.exe shell getprop ro.boot.veritymode > verity.txt",shell=True)
-             with open('verity.txt') as myfile:
-               verity = myfile.read()
-             subprocess.call("adb.exe shell getprop debug.mtklog.netlog.Running > mtk.txt",shell=True)
-             with open('mtk.txt') as myfile:
-               mtk = myfile.read()
-             subprocess.call("adb.exe shell getprop ro.product.model > device.txt",shell=True)
-             with open('device.txt') as myfile:
-               device = myfile.read()
-             subprocess.call("adb.exe shell getprop ro.hardware > platform.txt",shell=True)
-             with open('platform.txt', 'r') as myfile:
-               platform = myfile.read(4)
-             subprocess.call("adb.exe shell getprop ro.hardware > platform2.txt",shell=True)
-             with open('platform2.txt') as myfile:
-               platform2 = myfile.read()
-             subprocess.call("adb.exe shell getprop ro.product.cpu.abi > arch.txt",shell=True)
-             with open('arch.txt') as myfile:
-               arch = myfile.read()
-             subprocess.call("adb.exe shell getprop ro.build.version.release > android.txt",shell=True)
-             with open('android.txt') as myfile:
-               android = myfile.read()
-             subprocess.call("adb.exe shell getprop ro.product.manufacturer > brand.txt",shell=True)
-             with open('brand.txt') as myfile:
-               brand = myfile.read()
-             subprocess.call("adb.exe shell getenforce > selinux.txt",shell=True)
-             with open('selinux.txt') as myfile:
-               selinux = myfile.read()
-             subprocess.call("adb.exe shell pm list packages | grep supersu > supersu.txt",shell=True)
-             with open('selinux.txt') as myfile:
-               supersu = myfile.read()
+             verity = Popen('adb.exe shell getprop ro.boot.veritymode', shell=True, bufsize=64, stdin=PIPE, stdout=PIPE, stderr=STDOUT, close_fds=True).stdout.read().strip().decode('utf-8')
+             mtk = Popen('adb.exe shell getprop debug.mtklog.netlog.Running', shell=True, bufsize=64, stdin=PIPE, stdout=PIPE, stderr=STDOUT, close_fds=True).stdout.read().strip().decode('utf-8')
+             device = Popen('adb.exe shell getprop ro.product.model', shell=True, bufsize=64, stdin=PIPE, stdout=PIPE, stderr=STDOUT, close_fds=True).stdout.read().strip().decode('utf-8')
+             platform = Popen('adb.exe shell getprop ro.hardware', shell=True, bufsize=64, stdin=PIPE, stdout=PIPE, stderr=STDOUT, close_fds=True).stdout.read().strip().decode('utf-8')
+             platform2 = Popen('adb.exe shell getprop ro.hardware', shell=True, bufsize=64, stdin=PIPE, stdout=PIPE, stderr=STDOUT, close_fds=True).stdout.read().strip().decode('utf-8')
+             arch = Popen('adb.exe shell getprop ro.product.cpu.abi', shell=True, bufsize=64, stdin=PIPE, stdout=PIPE, stderr=STDOUT, close_fds=True).stdout.read().strip().decode('utf-8')
+             android = Popen('adb.exe shell getprop ro.build.version.release', shell=True, bufsize=64, stdin=PIPE, stdout=PIPE, stderr=STDOUT, close_fds=True).stdout.read().strip().decode('utf-8')
+             brand = Popen('adb.exe shell getprop ro.product.manufacturer', shell=True, bufsize=64, stdin=PIPE, stdout=PIPE, stderr=STDOUT, close_fds=True).stdout.read().strip().decode('utf-8')
+             selinux = Popen('adb.exe shell getenforce', shell=True, bufsize=64, stdin=PIPE, stdout=PIPE, stderr=STDOUT, close_fds=True).stdout.read().strip().decode('utf-8')
+             supersu = Popen('adb.exe shell pm list packages | grep chainfire', shell=True, bufsize=64, stdin=PIPE, stdout=PIPE, stderr=STDOUT, close_fds=True).stdout.read().strip().decode('utf-8')
+             root = Popen('adb.exe shell which su', shell=True, bufsize=64, stdin=PIPE, stdout=PIPE, stderr=STDOUT, close_fds=True).stdout.read().strip().decode('utf-8')
+             if "su" in root:
+                   root = "yes"
+                   pass
+             else:
+                   root = "no"
+                   pass
              print("Device: " + device)
              print("Brand: " + brand)
              print("ARCH: " + arch)
              print("Platform: " + platform2)
              print("Android: " + android)
              print("SELinux status: " + selinux)
+             print("Root: " + root)
              print("--------------------------------------")
-             if platform in ('mt81', 'mt67'):
-              if platform in set(supported):
+             if "mt81" or "mt67" in platform:
                pass
              else:
                wait = input("Incompatible CPU! BYE!")
@@ -82,8 +71,14 @@ while True:
                 print("--------------------------------------")
                 print("Pushed files succsefully!")
                 print("--------------------------------------")
-                print("Installing SuperSU...")
-                subprocess.call("adb.exe install files/SuperSU.apk",shell=True)
+                print(supersu)
+                if "chainfire" in supersu:
+                   print("SuperSU already installed... Skip the install")
+                   pass
+                else:
+                   print("Installing SuperSU...")
+                   subprocess.call("adb.exe install files/SuperSU.apk",shell=True)
+                   pass
                 print("--------------------------------------")
                 print("Starting Root Process...")
                 subprocess.call("adb.exe shell chmod 755 /data/local/tmp/mtk-su",shell=True)
@@ -99,9 +94,15 @@ while True:
                 subprocess.call("adb.exe push arm/mtk-su arm/root.sh arm/su arm/supolicy arm/libsupol.so /data/local/tmp",shell=True)
                 print("--------------------------------------")
                 print("Pushed files succsefully!")
-                print("--------------------------------------")
-                print("Installing SuperSU...")
-                subprocess.call("adb.exe install files/SuperSU.apk",shell=True)
+                print("--------------------------------------")     
+                print(supersu)           
+                if "supersu" in supersu:
+                   print("SuperSU already installed... Skip the install")
+                   pass
+                else:
+                   print("Installing SuperSU...")
+                   subprocess.call("adb.exe install files/SuperSU.apk",shell=True)
+                   pass
                 print("--------------------------------------")
                 print("Starting Root Process...")
                 subprocess.call("adb.exe shell chmod 755 /data/local/tmp/mtk-su",shell=True)
@@ -113,16 +114,15 @@ while True:
 
 
         elif option=="2":
+               os.system("cls")
                print("ROOT SHELL SPAWNER")
-               subprocess.call("adb.exe shell getprop ro.product.cpu.abi > arch.txt",shell=True)
-               with open('arch.txt') as myfile:
-                  arch = myfile.read()
-               print("Spawning Root Shell... \n For exit type 'exit' two times or Control+C for terminate the script")
+               arch = Popen('adb.exe shell getprop ro.product.cpu.abi', shell=True, bufsize=64, stdin=PIPE, stdout=PIPE, stderr=STDOUT, close_fds=True).stdout.read().strip().decode('utf-8')
+               print("Spawning Root Shell... \n For exit type 'exit' or Control+C for terminate the script")
                # ty again t0x1cSH :)
                if "arm64-v8a" in arch:
                    subprocess.call("adb.exe push arm64/mtk-su /data/local/tmp",shell=True)
-                   subprocess.call("adb shell chmod 755 /data/local/tmp/mtk-su",shell=True)
-                   subprocess.call("adb shell /data/local/tmp/mtk-su",shell=True)
+                   subprocess.call("adb.exe shell chmod 755 /data/local/tmp/mtk-su",shell=True)
+                   subprocess.call("adb.exe shell /data/local/tmp/mtk-su",shell=True)
                    wait = input("PRESS ENTER TO CONTINUE.")
                    os.system('cls')
                elif "armeabi-v7a" in arch:
@@ -132,6 +132,62 @@ while True:
                    subprocess.call("adb.exe shell /data/local/tmp/mtk-su",shell=True)
                    wait = input("PRESS ENTER TO CONTINUE.")
                    os.system('cls')
+
+        elif option=="3":
+               os.system("cls")
+               print("Detecting device information....")
+               print("--------------------------------------")
+               verity = Popen('adb.exe shell getprop ro.boot.veritymode', shell=True, bufsize=64, stdin=PIPE, stdout=PIPE, stderr=STDOUT, close_fds=True).stdout.read().strip().decode('utf-8')
+               mtk = Popen('adb.exe shell getprop debug.mtklog.netlog.Running', shell=True, bufsize=64, stdin=PIPE, stdout=PIPE, stderr=STDOUT, close_fds=True).stdout.read().strip().decode('utf-8')
+               device = Popen('adb.exe shell getprop ro.product.model', shell=True, bufsize=64, stdin=PIPE, stdout=PIPE, stderr=STDOUT, close_fds=True).stdout.read().strip().decode('utf-8')
+               platform = Popen('adb.exe shell getprop ro.hardware', shell=True, bufsize=64, stdin=PIPE, stdout=PIPE, stderr=STDOUT, close_fds=True).stdout.read().strip().decode('utf-8')
+               platform2 = Popen('adb.exe shell getprop ro.hardware', shell=True, bufsize=64, stdin=PIPE, stdout=PIPE, stderr=STDOUT, close_fds=True).stdout.read().strip().decode('utf-8')
+               arch = Popen('adb.exe shell getprop ro.product.cpu.abi', shell=True, bufsize=64, stdin=PIPE, stdout=PIPE, stderr=STDOUT, close_fds=True).stdout.read().strip().decode('utf-8')
+               android = Popen('adb.exe shell getprop ro.build.version.release', shell=True, bufsize=64, stdin=PIPE, stdout=PIPE, stderr=STDOUT, close_fds=True).stdout.read().strip().decode('utf-8')
+               brand = Popen('adb.exe shell getprop ro.product.manufacturer', shell=True, bufsize=64, stdin=PIPE, stdout=PIPE, stderr=STDOUT, close_fds=True).stdout.read().strip().decode('utf-8')
+               selinux = Popen('adb.exe shell getenforce', shell=True, bufsize=64, stdin=PIPE, stdout=PIPE, stderr=STDOUT, close_fds=True).stdout.read().strip().decode('utf-8')
+               supersu = Popen('adb.exe shell pm list packages | grep chainfire', shell=True, bufsize=64, stdin=PIPE, stdout=PIPE, stderr=STDOUT, close_fds=True).stdout.read().strip().decode('utf-8')
+               root = Popen('adb.exe shell which su', shell=True, bufsize=64, stdin=PIPE, stdout=PIPE, stderr=STDOUT, close_fds=True).stdout.read().strip().decode('utf-8')
+               if "su" in root:
+                   root = "yes"
+                   pass
+               else:
+                   root = "no"
+                   pass
+               print("Device: " + device)
+               print("Brand: " + brand)
+               print("ARCH: " + arch)
+               print("Platform: " + platform2)
+               print("Android: " + android)
+               print("SELinux status: " + selinux)
+               print("Root Status: " + root)
+               print("--------------------------------------")
+               if "no" in root:
+                   print("You don't have root installed. How come you want to unroot it?")
+                   break
+               else:
+                   print("Pushing unroot script & mtk-su...")
+                   if "abi" in arch:
+                      arch = "arm"
+                      pusharm1 = "adb.exe push " + arch + "/unroot.sh " + "/data/local/tmp"
+                      pusharm2 = "adb.exe push " + arch + "/mtk-su " + "/data/local/tmp"
+                      os.system(pusharm1)
+                      os.system(pusharm2)
+                      print("Setting correct permissions...")
+                      os.system("adb.exe shell chmod 755 /data/local/tmp/*")
+                      os.system("adb.exe shell /data/local/tmp/mtk-su -c './data/local/tmp/unroot.sh'")
+                      os.system("sleep 5")
+                   elif "arm64" in arch:
+                      arch = "arm64"
+                      pusharm641 = "adb.exe push " + arch + "/unroot.sh " + "/data/local/tmp"
+                      pusharm642 = "adb.exe push " + arch + "/mtk-su " + "/data/local/tmp"
+                      os.system(pusharm641)
+                      os.system(pusharm642)
+                      print("Setting correct permissions...")
+                      os.system("adb.exe shell chmod 755 /data/local/tmp/*")
+                      os.system("adb.exe shell /data/local/tmp/mtk-su -c './data/local/tmp/unroot.sh'")
+                      os.system("sleep 5")
+
 
         elif option=="3":
                break
