@@ -17,6 +17,9 @@ MTK-SU AUTOMATED ROOT v4.
 * Unroot the device.
 * Bootless root (Soon...)
 
+**Thanks to:**
+* Downloads: https://github.com/R0rt1z2/AutomatedRoot/releases (Latest release)
+
 **The tool is not detecting python on Windows?**
 * Copy all the tool and his contents to the python folder and execute the .bat.
 
