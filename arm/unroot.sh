@@ -8,11 +8,9 @@ system/xbin/su
 system/xbin/daemonsu
 system/xbin/supolicy
 system/lib/libsupol.so
-system/lib64/libsupol.so
 system/bin/app_process_init
-system/bin/app_process64
-system/bin/app_process64_original
-system/bin/app_process"
+system/bin/app_process
+system/bin/app_process32_original"
 
 # Mount system as read-write.
 mount -o remount -rw /system
