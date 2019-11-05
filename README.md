@@ -27,3 +27,7 @@ MTK-SU AUTOMATED ROOT v4.
 * diplomatic for create his MTK-SU!
 * t0x1cSH for the little help with the script.
 * stackoverflow for his help with script lol.
+
+
+**LICENSE:**
+* See LICENSE.MIT and LICENSE.GPL2 for more details.
