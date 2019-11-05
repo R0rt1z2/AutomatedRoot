@@ -9,6 +9,7 @@
 * LINUX: ```$ sudo apt install python3```
 
 **How to use the tool?**
+
 LINUX USERS: ```$ chmod a+x MTK-SU.sh && ./MTK-SU.sh```
 
 WINDOWS USERS: Double-Click on MTK-SU.bat
