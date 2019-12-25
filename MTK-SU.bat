@@ -1,2 +1,2 @@
 @echo off
-python3 mtk-su.py
+python mtk-su.py
