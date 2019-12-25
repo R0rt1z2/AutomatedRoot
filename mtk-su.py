@@ -76,7 +76,6 @@ while True:
                 print("--------------------------------------")
                 print("Pushed files succsefully!")
                 print("--------------------------------------")
-                print(supersu)
                 if "chainfire" in supersu:
                    print("SuperSU already installed... Skip the install")
                    pass
@@ -99,7 +98,6 @@ while True:
                 print("--------------------------------------")
                 print("Pushed files succsefully!")
                 print("--------------------------------------")     
-                print(supersu)           
                 if "supersu" in supersu:
                    print("SuperSU already installed... Skip the install")
                    pass
