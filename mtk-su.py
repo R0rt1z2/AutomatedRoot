@@ -13,6 +13,9 @@ if _platform == "linux":
 elif _platform == "win64" or "win32":
     clean = "cls"
 
+def push_file(file, target):
+        call(f'adb push {file} {target}')
+
 def menu():
         os.system(clean)
         print("\t Big thanks to diplomatic")
@@ -67,15 +70,18 @@ while True:
                  print("Sorry! Your device seems to have DM-Verity, this method will not work. Exiting...")
                  time.sleep(1)
                  break
-             elif " " in verity:
-                 continue
              # ty t0x1cSH
              if "arm64-v8a" in arch:
                 print("Detected arm64 arch.. Pushing arm64 mtk-su & files")
-                call("adb push arm64/mtk-su arm64/root.sh arm64/su arm64/supolicy arm64/libsupol.so /data/local/tmp",shell=True)
+                push_file("arm64/mtk-su", "/data/local/tmp")
+                push_file("arm64/root.sh", "/data/local/tmp")
+                push_file("arm64/su", "/data/local/tmp")
+                push_file("arm64/supolicy", "/data/local/tmp")
+                push_file("arm64/libsupol.so", "/data/local/tmp")
                 print("--------------------------------------")
                 print("Pushed files succsefully!")
                 print("--------------------------------------")
+                print(supersu)
                 if "chainfire" in supersu:
                    print("SuperSU already installed... Skip the install")
                    pass
@@ -94,10 +100,15 @@ while True:
                 os.system(clean)
              elif "armeabi-v7a" in arch:
                 print("Detected armv7 arch.. Pushing armv7 mtk-su & files")
-                subprocess.call("adb push arm/mtk-su arm/root.sh arm/su arm/supolicy arm/libsupol.so /data/local/tmp",shell=True)
+                push_file("arm/mtk-su", "/data/local/tmp")
+                push_file("arm/root.sh", "/data/local/tmp")
+                push_file("arm/su", "/data/local/tmp")
+                push_file("arm/supolicy", "/data/local/tmp")
+                push_file("arm/libsupol.so", "/data/local/tmp")
                 print("--------------------------------------")
                 print("Pushed files succsefully!")
                 print("--------------------------------------")     
+                print(supersu)           
                 if "supersu" in supersu:
                    print("SuperSU already installed... Skip the install")
                    pass
