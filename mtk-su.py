@@ -62,9 +62,6 @@ while True:
              print("SELinux status: " + selinux)
              print("Root: " + root)
              print("--------------------------------------")
-             if "KFMAWI" in model:
-                 print("Fire HD10 2019 is not supported by this tool! Exiting...")
-                 exit(1)
              if "mt81" or "mt67" or "mt6595" or "mt6580" in platform:
                pass
              else:

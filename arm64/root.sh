@@ -14,7 +14,7 @@ if [ $BRAND == "Amazon" ]; then
     FOS_VER=`getprop ro.build.version.name | awk -F"[()]" '{print $2}'`
     FOS_NUMBER=`getprop ro.build.version.fireos`
     echo "Your device seems to be in FireOS $FOS_VER"
-    if [ $DEVICE == "suez" ] || [ $DEVICE == "douglas" ] && [ $FOS_VER -gt "636558520" ]; then
+    if [ $DEVICE == "suez" ] || [ $DEVICE == "douglas" ] && [ $FOS_VER -gt 636558520 ]; then
 	   echo "FireOS 5.6.4.0 build 636558520 and up are not supported in Fire 7th gen devices!"
     elif [ $DEVICE == "giza" ] && [ $FOS_VER -gt 626533320 ]; then
 	   echo "FireOS 5.3.6.4 build 626533320 and up are not supported in Fire 6th gen devices!"
@@ -29,7 +29,7 @@ if [ $BRAND == "Amazon" ]; then
     fi
 fi
 
-# Check if dm-veruty is present..
+# Check if dm-verity is present..
 VERITY=`cat /fstab.$HARDWARE* | grep system | grep -oh "\w*verify\w*"` # Search for the "verify" flag in system mount line
 
 if [ "$VERITY" == "" ]; then
