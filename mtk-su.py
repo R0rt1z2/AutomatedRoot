@@ -16,6 +16,10 @@ elif _platform == "win64" or "win32":
 def push_file(file, target):
         call(f'adb push {file} {target}')
 
+def get_prop(prop, name):
+        name = Popen(f'adb shell getprop {prop}', shell=True, bufsize=64, stdin=PIPE, stdout=PIPE, stderr=STDOUT, close_fds=True).stdout.read().strip().decode('utf-8')
+        return name
+
 def menu():
         os.system(clean)
         print("\t Big thanks to diplomatic")
@@ -36,44 +40,36 @@ while True:
              os.system(clean)
              print("Detecting device information....")
              print("--------------------------------------")
-             verity = Popen('adb shell getprop ro.boot.veritymode', shell=True, bufsize=64, stdin=PIPE, stdout=PIPE, stderr=STDOUT, close_fds=True).stdout.read().strip().decode('utf-8')
-             mtk = Popen('adb shell getprop debug.mtklog.netlog.Running', shell=True, bufsize=64, stdin=PIPE, stdout=PIPE, stderr=STDOUT, close_fds=True).stdout.read().strip().decode('utf-8')
-             device = Popen('adb shell getprop ro.product.model', shell=True, bufsize=64, stdin=PIPE, stdout=PIPE, stderr=STDOUT, close_fds=True).stdout.read().strip().decode('utf-8')
-             platform = Popen('adb shell getprop ro.hardware', shell=True, bufsize=64, stdin=PIPE, stdout=PIPE, stderr=STDOUT, close_fds=True).stdout.read().strip().decode('utf-8')
-             platform2 = Popen('adb shell getprop ro.hardware', shell=True, bufsize=64, stdin=PIPE, stdout=PIPE, stderr=STDOUT, close_fds=True).stdout.read().strip().decode('utf-8')
-             arch = Popen('adb shell getprop ro.product.cpu.abi', shell=True, bufsize=64, stdin=PIPE, stdout=PIPE, stderr=STDOUT, close_fds=True).stdout.read().strip().decode('utf-8')
-             android = Popen('adb shell getprop ro.build.version.release', shell=True, bufsize=64, stdin=PIPE, stdout=PIPE, stderr=STDOUT, close_fds=True).stdout.read().strip().decode('utf-8')
-             brand = Popen('adb shell getprop ro.product.manufacturer', shell=True, bufsize=64, stdin=PIPE, stdout=PIPE, stderr=STDOUT, close_fds=True).stdout.read().strip().decode('utf-8')
+             model = get_prop("ro.product.model", "model")
+             platform = get_prop("ro.hardware", "platform")
+             arch = get_prop("ro.product.cpu.abi", "arch")
+             android = get_prop("ro.build.version.release", "android")
+             brand = get_prop("ro.product.manufacturer", "brand")
              selinux = Popen('adb shell getenforce', shell=True, bufsize=64, stdin=PIPE, stdout=PIPE, stderr=STDOUT, close_fds=True).stdout.read().strip().decode('utf-8')
              supersu = Popen('adb shell pm list packages', shell=True, bufsize=64, stdin=PIPE, stdout=PIPE, stderr=STDOUT, close_fds=True).stdout.read().strip().decode('utf-8')
              root = Popen('adb shell which su', shell=True, bufsize=64, stdin=PIPE, stdout=PIPE, stderr=STDOUT, close_fds=True).stdout.read().strip().decode('utf-8')
              if "su" in root:
-                   root = "yes"
+                   root == "yes"
                    pass
              else:
                    root = "no"
                    pass
-             print("Device: " + device)
+             print("Device: " + model)
              print("Brand: " + brand)
              print("ARCH: " + arch)
-             print("Platform: " + platform2)
+             print("Platform: " + platform)
              print("Android: " + android)
              print("SELinux status: " + selinux)
              print("Root: " + root)
              print("--------------------------------------")
-             if "KFMAWI" in device:
+             if "KFMAWI" in model:
                  print("Fire HD10 2019 is not supported by this tool! Exiting...")
                  exit(1)
-             if "mt81" or "mt67" in platform:
+             if "mt81" or "mt67" or "mt6595" or "mt6580" in platform:
                pass
              else:
                wait = input("Incompatible CPU! BYE!")
                break
-             if "enforcing" in verity:
-                 print("Sorry! Your device seems to have DM-Verity, this method will not work. Exiting...")
-                 time.sleep(1)
-                 break
-             # ty t0x1cSH
              if "arm64-v8a" in arch:
                 print("Detected arm64 arch.. Pushing arm64 mtk-su & files")
                 push_file("arm64/mtk-su", "/data/local/tmp")
@@ -84,7 +80,7 @@ while True:
                 print("--------------------------------------")
                 print("Pushed files succsefully!")
                 print("--------------------------------------")
-                if "chainfire" in supersu:
+                if "supersu" in supersu:
                    print("SuperSU already installed... Skip the install")
                    pass
                 else:
