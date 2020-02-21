@@ -14,7 +14,7 @@ elif _platform == "win64" or "win32":
     clean = "cls"
 
 def push_file(file, target):
-        call(f'adb push {file} {target}')
+        os.system("adb push {} {}".format(file, target))
 
 def get_prop(prop, name):
         name = Popen(f'adb shell getprop {prop}', shell=True, bufsize=64, stdin=PIPE, stdout=PIPE, stderr=STDOUT, close_fds=True).stdout.read().strip().decode('utf-8')
