@@ -3,6 +3,7 @@ import subprocess
 import time
 from subprocess import Popen, PIPE, DEVNULL, STDOUT, check_call, call
 from sys import platform as _platform
+import sys
 
 # By R0rt1z2
 # All the credits goes to diplomatic for create his excellent MTK-SU!
@@ -32,7 +33,7 @@ def check_devices():
                  sys.stdout.write("."); sys.stdout.flush()
                  time.sleep(1)
               else:
-                 print("\n[+] Found device!\n")
+                 print("\n\n[+] Found device!\n")
                  if "offline" in devices or "unauthorized" in devices:
                      print("[!] ERROR: Device is unauthorized or offline!\n")
                      sys.exit(1)
@@ -75,10 +76,11 @@ def print_banner():
 def show_menu():
         os.system(clean)
         print_banner()
-        print("\n1 - Root the Device")
-        print("\n2 - Spawn Root Shell")
-        print("\n3 - Unroot the device")
-        print("\n4 - Exit")
+        print("\n  1 - Root the Device")
+        print("\n  2 - Unroot the device")
+        print("\n  3 - Bootless ROOT")
+        print("\n  4 - Spawn Root Shell")
+        print("\n  5 - Exit")
 
 while True:
         show_menu()
@@ -88,6 +90,7 @@ while True:
         if option is "1":
              os.system(clean)
              print_banner()
+             check_devices()
              print("\n[?] Getting device information...")
 
              print_device_info()
@@ -136,13 +139,14 @@ while True:
 
                 ("[?] Press enter to continue\n")
 
-        elif option is "2":
+        elif option is "4":
                os.system(clean)
                print_banner()
+               check_devices()
                Popen('adb shell mkdir /data/local/tmp/arm', shell=True, bufsize=64, stdin=PIPE, stdout=PIPE, stderr=STDOUT, close_fds=True).stdout.read().strip().decode('utf-8')
                Popen('adb shell mkdir /data/local/tmp/arm64', shell=True, bufsize=64, stdin=PIPE, stdout=PIPE, stderr=STDOUT, close_fds=True).stdout.read().strip().decode('utf-8')
                arch = get_prop("ro.product.cpu.abi", "arch")
-               print("\n[?] Spawning Root Shell...\n")
+               print("[?] Spawning Root Shell...\n")
                print("[?] For exit type 'exit' or press Control+C for terminate the script\n")
                if "arm64-v8a" in arch:
                    call("adb push files/arm64/mtk-su /data/local/tmp/arm64",shell=True)
@@ -157,6 +161,16 @@ while True:
 
         elif option is "3":
                os.system(clean)
+               print_banner()
+               check_devices()
+               print("\n[?] Getting device information...")
+               print_device_info()
+               
+
+        elif option is "2":
+               os.system(clean)
+               print_banner()
+               check_devices()
                print("\n[?] Getting device information...")
 
                print_device_info()
@@ -173,17 +187,16 @@ while True:
                else:
                    print("[?] Pushing unroot script...\n")
                    os.system("adb push files/common/unroot.sh /data/local/tmp")
-                   print("[?] Setting correct permissions...\n")
+                   print("\n[?] Setting correct permissions...\n")
                    os.system("adb shell chmod 755 /data/local/tmp/unroot.sh")
                    print("[?] Starting the unroot process...\n")
                    os.system("adb shell su -c '/data/local/tmp/unroot.sh'")
                    input("[?] Press enter to continue\n")
 
-        elif option is "4":
+        elif option is "5":
               os.system(clean)
               break
               exit(0)
 
         else:
-               input("[!] {}: invalid option. Press any key to continue...\n".format(option))
-
+               input("\n[!] {}: invalid option. Press any key to continue...\n".format(option))
