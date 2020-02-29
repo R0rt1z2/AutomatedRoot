@@ -1,4 +1,6 @@
-# MTK-SU AUTOMATED ROOT v5.
+<p align="center">
+  <img src="https://github.com/R0rt1z2/AutomatedRoot/blob/master/files/images/banner.PNG?raw=true" alt="AutomatedRoot"/>
+</p>
 
 **Requeriments:**
 * Python 3.X with local path defined (WINDOWS).
