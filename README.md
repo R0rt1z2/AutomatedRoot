@@ -2,32 +2,37 @@
   <img src="https://github.com/R0rt1z2/AutomatedRoot/blob/master/files/images/banner.PNG?raw=true" alt="AutomatedRoot"/>
 </p>
 
-**Requeriments:**
-* Python 3.X with local path defined (WINDOWS).
-* ADB with local path defined (WINDOWS).
+***WHAT IS THIS?***
 
-**Download Python 3**
-* WINDOWS: https://www.python.org/ftp/python/3.7.4/python-3.7.4-amd64.exe
-* LINUX: ```$ sudo apt install python3```
+This tool, will automatically root your 64 bit MediaTek based device using the mtk-su exploit created by diplomatic@xda.
+It will automatically check if your device has dm-verity, the arch, the android version, etc... And will push the required files to obtain full ROOT (Android 5.0 - 7.1) or bootless ROOT in any Android Version (Feature coming soon...).
 
-**How to use the tool?**
-* WINDOWS USERS: Double-Click on MTK-SU.bat
-* LINUX USERS: ```$ chmod a+x MTK-SU.sh && ./MTK-SU.sh```
+***REQUERIMENTS:***
+* Python 3.X. (With local path defined in windows).
+* ADB. (With local path defined in windows).
 
-**Available options**
+***HOW TO USE THE TOOL?***
+* Windows Users: double-Click on MTK-SU.bat.
+* Linux Users: ```$ chmod a+x MTK-SU.sh && ./MTK-SU.sh```
+
+***AVAILABLE OPTIONS:***
 * Root the device. (System-mode using SuperSU).
-* Spawn a root shell. (Using diplomatic's mtk-su).
+* Spawn a root shell.
 * Unroot the device. (Deleting su files and restoring original app_processes).
-* Bootless root (Soon...).
+* Bootless root for devices with dm-verity enabled(Soon...).
 
-**Download:**
+***DOWNLOAD:***
 * Downloads: https://github.com/R0rt1z2/AutomatedRoot/releases (Latest release).
 
-**Thanks to:**
+***REPORTING BUGS***
+* If you find any bug in my tool, please create and report the issue [here](https://github.com/R0rt1z2/AutomatedRoot/issues).
+* Use [this template](https://github.com/R0rt1z2/AutomatedRoot/blob/master/files/images/bugreport_template.md) to help me to find out what's going on. 
+
+***SPECIAL THANKS TO:***
 * diplomatic for create his MTK-SU!
 * uniminin for the help with the script.
 * t0x1cSH for the little help with the script.
-* stackoverflow for his help with script.
 
-**LICENSE:**
+***LICENSE:***
+* This tool is licensed under the GNU General Public License.
 * See LICENSE.MIT and LICENSE.GPL2 for more details.
