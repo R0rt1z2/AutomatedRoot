@@ -21,8 +21,8 @@ if [ $BRAND == "Amazon" ]; then
     elif [ $DEVICE == "giza" ] && [ $FOS_VER -gt 626533320 ]; then
 	   echo "[-] FireOS 5.3.6.4 build 626533320 and up are not supported in Fire 6th gen devices!"
 	   exit 1
-    elif [ $DEVICE == "sloane" ] && [ $FOS_NUMBER -gt "5.2.2.0" ]; then
-	   echo "[-] FireOS 5.2.2.0 and up are not supported in Fire TV 2 (2015)!"
+    elif [ $DEVICE == "sloane" ]; then
+	   echo "[-] Fire TV 2 (2015) sloane is not supported!"
 	   exit 1
     elif [ $DEVICE == "karnak" ] && [ $FOS_NUMBER -gt "6.3.0.1" ]; then
 	   echo "[-] FireOS 6.3.0.1 and up are not supported in Fire HD8 (2018)!"
