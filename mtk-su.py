@@ -78,9 +78,8 @@ def show_menu():
         print_banner()
         print("\n  1 - Root the Device")
         print("\n  2 - Unroot the device")
-        print("\n  3 - Bootless ROOT")
-        print("\n  4 - Spawn Root Shell")
-        print("\n  5 - Exit")
+        print("\n  3 - Spawn Root Shell")
+        print("\n  4 - Exit")
 
 while True:
         show_menu()
@@ -139,7 +138,7 @@ while True:
 
                 ("[?] Press enter to continue\n")
 
-        elif option is "4":
+        elif option is "3":
                os.system(clean)
                print_banner()
                check_devices()
@@ -157,15 +156,7 @@ while True:
                    call("adb push files/arm/mtk-su /data/local/tmp/arm",shell=True)
                    call("adb shell chmod 755 /data/local/tmp/arm/mtk-su",shell=True)
                    call("adb shell /data/local/tmp/mtk-su -c '/system/bin/sh'",shell=True)
-                   os.system(clean)
-
-        elif option is "3":
-               os.system(clean)
-               print_banner()
-               check_devices()
-               print("\n[?] Getting device information...")
-               print_device_info()
-               
+                   os.system(clean)               
 
         elif option is "2":
                os.system(clean)
@@ -193,7 +184,7 @@ while True:
                    os.system("adb shell su -c '/data/local/tmp/unroot.sh'")
                    input("[?] Press enter to continue\n")
 
-        elif option is "5":
+        elif option is "4":
               os.system(clean)
               break
               exit(0)
