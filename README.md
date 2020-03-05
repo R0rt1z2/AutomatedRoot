@@ -4,8 +4,10 @@
 
 ***WHAT IS THIS?***
 
-This tool, will automatically root your 64 bit MediaTek based device using the mtk-su exploit created by diplomatic@xda.
+This tool, will automatically root your 64 bit MediaTek based device using the mtk-su exploit (CVE-2020-0069) created/found by diplomatic@xda.
 It will automatically check if your device has dm-verity, the arch, the android version, etc... And will push the required files to obtain full ROOT (Android 5.0 - 7.1) or bootless ROOT in any Android Version (Feature coming soon...).
+
+NOTE: It can also root a few 32 bit platforms such as mt6580 & mt6595.
 
 ***REQUERIMENTS:***
 * Python 3.X. (With local path defined in windows).
