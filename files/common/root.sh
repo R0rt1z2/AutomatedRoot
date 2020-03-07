@@ -14,7 +14,7 @@ if [ $BRAND == "Amazon" ]; then
 
     echo "[?] Checking FireOS version..."
 
-    FOS_VER=$(getprop ro.build.version.name | awk -F"[()]" '{print $2}')
+    FOS_VER=$(getprop ro.build.version.name | awk -F '[()]' '{print $2}')
     FOS_NUMBER=$(getprop ro.build.version.fireos)
 
     echo "[?] Your device seems to be in FireOS $FOS_VER"
