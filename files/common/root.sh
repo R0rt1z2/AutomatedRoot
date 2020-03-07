@@ -3,18 +3,21 @@
 ##########################################################################################
 
 # Get the device props
-BRAND=`getprop ro.product.brand` # Brand (i.e: Asus, bq, Amazon, etc...)
-DEVICE=`getprop ro.product.device` # Product model (i.e: suez, douglas, etc...)
-HARDWARE=`getprop ro.hardware` # CPU (i.e: mt8163, mt8173, mt6735, etc...)
-ARCH=`getprop ro.product.cpu.abi` # ARCH (i.e: armeabi-v7a, arm64-v8a, mips, etc...)
+BRAND=$(getprop ro.product.brand) # Brand (i.e: Asus, bq, Amazon, etc...)
+DEVICE=$(getprop ro.product.device) # Product model (i.e: suez, douglas, etc...)
+HARDWARE=$(getprop ro.hardware) # CPU (i.e: mt8163, mt8173, mt6735, etc...)
+ARCH=$(getprop ro.product.cpu.abi) # ARCH (i.e: armeabi-v7a, arm64-v8a, mips, etc...)
 
 # If device is "amazon-branded" check the FireOS version
 if [ $BRAND == "Amazon" ]; then
-    echo "This is an Amazon Device..."
-    echo "Checking FireOS version..."
-    FOS_VER=`getprop ro.build.version.name | awk -F"[()]" '{print $2}'`
-    FOS_NUMBER=`getprop ro.build.version.fireos`
-    echo "Your device seems to be in FireOS $FOS_VER"
+    echo "[?] This is an Amazon Device..."
+
+    echo "[?] Checking FireOS version..."
+
+    FOS_VER=$(getprop ro.build.version.name | awk -F"[()]" '{print $2}')
+    FOS_NUMBER=$(getprop ro.build.version.fireos)
+
+    echo "[?] Your device seems to be in FireOS $FOS_VER"
     if [ $DEVICE == "suez" ] || [ $DEVICE == "douglas" ] && [ $FOS_VER -gt 636558520 ]; then
 	   echo "[-] FireOS 5.6.4.0 build 636558520 and up are not supported in Fire 7th gen devices!"
 	   exit 1
@@ -37,23 +40,43 @@ if [ $BRAND == "Amazon" ]; then
 fi
 
 # Check if the script was launched from a root shell
-id=`id | grep uid=0\(root\)`
-ROOT=$?
+ID=$(id | grep uid=0\(root\))
 
-# Check if dm-verity is present..
-VERITY=`cat /fstab.$HARDWARE* | grep system | grep -oh "\w*verify\w*"` # Search for the "verify" flag in system mount line
-
-if [ "$VERITY" == "" ]; then
-   echo "[!] Reached EOF without any verify flag."
-   echo "[!] Attempt to cat fstab in vendor!"
-   VERITY=`cat /vendor/etc/fstab.$HARDWARE* 2>/dev/null | grep system | grep -oh "\w*verify\w*"` # Search for the "verify" flag in system mount line
+if [ $? -eq 1 ]; then
+   echo "[!] FATAL: Script wasn't launched from root id"
+   exit 1
 fi
 
-if [ "$VERITY" == "verify" ]; then
-    echo "[-] DM-Verity is present in this device. Abort!"
-    exit
+VENDOR=$(readlink -f /vendor | grep system)
+
+if [ $? -eq 1 ]; then
+   echo "[?] This device has vendor partition!"
+   HAS_VENDOR="YES"
+fi
+
+if [ "$HAS_VENDOR" -eq "YES" ]; then
+   echo "[?] Checking fstab in vendor..."
+   VERIFY=$(cat /vendor/etc/fstab* 2>/dev/null | grep verify | grep system)
+   if [ $? -eq 0 ]; then
+       echo "[-] DM-Verity is present in this device. Abort!"
+       exit 1
+   else
+       echo "[!] Did not found verify flag in vendor. Attempt to search in initramfs."
+       VERIFY=$(cat /fstab* 2>/dev/null | grep verify | grep system)
+       if [ $? -eq 0 ]; then
+           echo "[-] DM-Verity is present in this device. Abort!"
+           exit 1
+       fi
+       echo "[?] DM-Verity is not enabled in this device. Continue..."
+   fi
 else
-    echo "[+] DM-Verity is not present in this device. Continue..."
+   echo "[?] Checking fstab in initramfs..."
+   VERIFY=$(cat /fstab* 2>/dev/null | grep verify | grep system)
+   if [ $? -eq 0 ]; then
+        echo "[-] DM-Verity is present in this device. Abort!"
+        exit 1
+   fi
+   echo "[?] DM-Verity is not enabled in this device. Continue..."
 fi
 
 # Mount system read-write.
