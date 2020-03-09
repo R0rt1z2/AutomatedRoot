@@ -97,12 +97,13 @@ while True:
              arch = get_prop("ro.product.cpu.abi", "arch")
              platform = get_prop("ro.hardware", "platform")
 
-             if "mt81" or "mt67" or "mt6595" or "mt6580" in platform:
-                pass
-             else:
+             if platform is not "mt81" or "mt67" or "mt6595" or "mt6580":
                 print("[!] Unsupported CPU! mtk-su is not compatible with {}!\n".format(platform))
+                input()
                 break
                 sys.exit(1)
+             else:
+                pass
              if "arm64-v8a" in arch:
                 print("[?] Pushing files...\n")
                 Popen('adb shell mkdir /data/local/tmp/arm', shell=True, bufsize=64, stdin=PIPE, stdout=PIPE, stderr=STDOUT, close_fds=True).stdout.read().strip().decode('utf-8')
@@ -137,6 +138,7 @@ while True:
                     call('adb shell /data/local/tmp/arm/mtk-su -c "/data/local/tmp/root.sh"',shell=True)
 
                 ("[?] Press enter to continue\n")
+                input()
 
         elif option is "3":
                os.system(clean)
