@@ -35,7 +35,7 @@ def check_devices():
               else:
                  print("\n\n[+] Found device!\n")
                  if "offline" in devices or "unauthorized" in devices:
-                     print("[!] ERROR: Device is unauthorized or offline!\n")
+                     print("\n\n[!] ERROR: Device is unauthorized or offline!\n")
                      sys.exit(1)
                  break
 
@@ -65,6 +65,15 @@ def print_device_info():
          make_line("ROOT?", root_present, 50)
          print(margin)
 
+def check_platform(platform):
+         print("[?] Checking platform...\n")
+         if platform.startswith("mt81") or platform.startswith("mt67") or platform.startswith("mt6595") or platform.startswith("mt6580"):
+             print("[?] Check passed...\n")
+         else:
+             print("[!] Unsupported CPU! mtk-su is not compatible with {}!\n".format(platform))
+             input()
+             sys.exit(1)
+
 def print_banner():
          print("   __          _                        _           _   __    ___  ___  _____")
          print("  /_ \   _   _| |_ ___  _ __ ___   __ _| |_ ___  __| | /__\  /___\/___\/__   \ ")
@@ -79,7 +88,8 @@ def show_menu():
         print("\n  1 - Root the Device")
         print("\n  2 - Unroot the device")
         print("\n  3 - Spawn Root Shell")
-        print("\n  4 - Exit")
+        print("\n  4 - Bootless Root")
+        print("\n  5 - Exit")
 
 while True:
         show_menu()
@@ -90,56 +100,49 @@ while True:
              os.system(clean)
              print_banner()
              check_devices()
-             print("\n[?] Getting device information...")
+
+             print("[?] Getting device information...")
 
              print_device_info()
 
              arch = get_prop("ro.product.cpu.abi", "arch")
              platform = get_prop("ro.hardware", "platform")
 
-             if platform.startswith("mt81") or platform.startswith("mt67") or platform.startswith("mt6595") or platform.startswith("mt6580"):
-                pass
-             else:
-                print("[!] Unsupported CPU! mtk-su is not compatible with {}!\n".format(platform))
-                input()
-                break
-                sys.exit(1)
+             check_platform(platform)
                 
-             if "arm64-v8a" in arch:
-                print("[?] Pushing files...\n")
-                Popen('adb shell mkdir /data/local/tmp/arm', shell=True, bufsize=64, stdin=PIPE, stdout=PIPE, stderr=STDOUT, close_fds=True).stdout.read().strip().decode('utf-8')
-                Popen('adb shell mkdir /data/local/tmp/arm64', shell=True, bufsize=64, stdin=PIPE, stdout=PIPE, stderr=STDOUT, close_fds=True).stdout.read().strip().decode('utf-8')
-                push_file("files/arm64/mtk-su", "/data/local/tmp/arm64")
-                push_file("files/common/root.sh", "/data/local/tmp")
-                push_file("files/arm64/su", "/data/local/tmp/arm64")
-                push_file("files/arm64/supolicy", "/data/local/tmp/arm64")
-                push_file("files/arm64/libsupol.so", "/data/local/tmp/arm64")
-                push_file("files/arm/mtk-su", "/data/local/tmp/arm")
-                push_file("files/arm/su", "/data/local/tmp/arm")
-                push_file("files/arm/supolicy", "/data/local/tmp/arm")
-                push_file("files/arm/libsupol.so", "/data/local/tmp/arm")
+             print("[?] Pushing files...\n")
+             Popen('adb shell mkdir /data/local/tmp/arm', shell=True, bufsize=64, stdin=PIPE, stdout=PIPE, stderr=STDOUT, close_fds=True).stdout.read().strip().decode('utf-8')
+             Popen('adb shell mkdir /data/local/tmp/arm64', shell=True, bufsize=64, stdin=PIPE, stdout=PIPE, stderr=STDOUT, close_fds=True).stdout.read().strip().decode('utf-8')
+             push_file("files/arm64/mtk-su", "/data/local/tmp/arm64")
+             push_file("files/common/root.sh", "/data/local/tmp")
+             push_file("files/arm64/su", "/data/local/tmp/arm64")
+             push_file("files/arm64/supolicy", "/data/local/tmp/arm64")
+             push_file("files/arm64/libsupol.so", "/data/local/tmp/arm64")
+             push_file("files/arm/mtk-su", "/data/local/tmp/arm")
+             push_file("files/arm/su", "/data/local/tmp/arm")
+             push_file("files/arm/supolicy", "/data/local/tmp/arm")
+             push_file("files/arm/libsupol.so", "/data/local/tmp/arm")
 
-                supersu = get_var_from_system("adb shell pm list packages")
+             supersu = get_var_from_system("adb shell pm list packages")
 
-                if "supersu" in supersu:
-                   print("\n[?] SuperSU it's already installed...\n")
-                   pass
-                else:
-                   print("[?] Installing SuperSU...\n")
-                   call("adb install files/common/SuperSU.apk",shell=True)
-                   pass
-                print("[?] Starting Root Process...\n")
-                call("adb shell chmod 755 /data/local/tmp/arm/mtk-su",shell=True)
-                call("adb shell chmod 755 /data/local/tmp/arm64/mtk-su",shell=True)
-                call("adb shell chmod 755 /data/local/tmp/root.sh",shell=True)
+             if "supersu" in supersu:
+                 print("\n[?] SuperSU it's already installed...\n")
+                 pass
+             else:
+                 print("\n[?] Installing SuperSU...\n")
+                 call("adb install files/common/SuperSU.apk",shell=True)
+                 pass
+             print("[?] Starting Root Process...\n")
+             call("adb shell chmod 755 /data/local/tmp/arm/mtk-su",shell=True)
+             call("adb shell chmod 755 /data/local/tmp/arm64/mtk-su",shell=True)
+             call("adb shell chmod 755 /data/local/tmp/root.sh",shell=True)
 
-                if "arm64" in arch:
+             if "arm64" in arch:
                     call('adb shell /data/local/tmp/arm64/mtk-su -c "/data/local/tmp/root.sh"',shell=True)
-                elif "armeabi-v7a" in arch:
+             elif "armeabi-v7a" in arch:
                     call('adb shell /data/local/tmp/arm/mtk-su -c "/data/local/tmp/root.sh"',shell=True)
 
-                ("[?] Press enter to continue\n")
-                input()
+             input("[?] Press any key to continue...\n")
 
         elif option is "3":
                os.system(clean)
@@ -155,11 +158,13 @@ while True:
                    call("adb shell chmod 755 /data/local/tmp/arm64/mtk-su",shell=True)
                    call("adb shell /data/local/tmp/mtk-su -c '/system/bin/sh'",shell=True)
                    os.system(clean)
+                   break
                elif "armeabi-v7a" in arch:
                    call("adb push files/arm/mtk-su /data/local/tmp/arm",shell=True)
                    call("adb shell chmod 755 /data/local/tmp/arm/mtk-su",shell=True)
                    call("adb shell /data/local/tmp/mtk-su -c '/system/bin/sh'",shell=True)
-                   os.system(clean)               
+                   os.system(clean)
+                   break
 
         elif option is "2":
                os.system(clean)
@@ -187,10 +192,68 @@ while True:
                    os.system("adb shell su -c '/data/local/tmp/unroot.sh'")
                    input("[?] Press enter to continue\n")
 
-        elif option is "4":
+        elif option is "5":
               os.system(clean)
               break
               exit(0)
+
+        elif option is "4":
+              os.system(clean)
+              print_banner()
+              check_devices()
+              print("[?] Bootless Root Enabler")
+ 
+              print("\n[?] Getting device information...")
+
+              print_device_info()
+
+              arch = get_prop("ro.product.cpu.abi", "arch")
+              platform = get_prop("ro.hardware", "platform")
+
+              check_platform(platform)
+
+              print("[?] Preparing environment...\n")
+
+              Popen('adb shell mkdir /sdcard/init.d', shell=True, bufsize=64, stdin=PIPE, stdout=PIPE, stderr=STDOUT, close_fds=True).stdout.read().strip().decode('utf-8')
+              Popen('adb shell mkdir /sdcard/init.d/bin', shell=True, bufsize=64, stdin=PIPE, stdout=PIPE, stderr=STDOUT, close_fds=True).stdout.read().strip().decode('utf-8')
+
+              if "arm64" in arch:
+                  push_file("files/arm64/mtk-su", "/sdcard/init.d/bin/")
+              elif "abi" in arch:
+                  push_file("files/arm/mtk-su", "/sdcard/init.d/bin/")
+
+              push_file("files/common/magiskinit", "/sdcard/init.d/bin/")
+
+              push_file("files/common/suboot.sh", "/sdcard/init.d/")
+
+              packages = get_var_from_system("adb shell pm list packages")
+
+              if "initd" in packages:
+                  print("\n[?] Initd Support app is already installed. Skip the install...\n")
+                  Popen('adb shell pm clear com.ryosoftware.initd', shell=True, bufsize=64, stdin=PIPE, stdout=PIPE, stderr=STDOUT, close_fds=True).stdout.read().strip().decode('utf-8')
+              else:
+                  print("\n[?] Installing Initd Support app...\n")
+                  call("adb install files/common/Initd.apk")
+
+              if "magisk" in packages:
+                  print("[?] Magisk Manager is already installed. Skip the install...\n")
+              else:
+                  print("[?] Installing Magisk Manager...\n")
+                  call("adb install files/common/Magisk.apk")
+
+              print("[?] Pushing the helper...\n")
+              push_file("files/common/bootless_helper.sh", "/data/local/tmp/")
+              call("adb shell chmod 755 /data/local/tmp/bootless_helper.sh")
+
+              print("\n[?] Calling the helper...")
+              call("adb shell dos2unix /data/local/tmp/bootless_helper.sh")
+              call("adb shell /data/local/tmp/bootless_helper.sh")
+              print("[?] Exiting in 10 seconds...\n")
+              time.sleep(10)
+              input("[?] Press any key to continue...\n")
+              os.system(clean)
+              break
+
 
         else:
                input("\n[!] {}: invalid option. Press any key to continue...\n".format(option))

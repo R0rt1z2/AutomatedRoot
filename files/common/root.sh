@@ -124,6 +124,4 @@ rm -rf /data/local/tmp/arm64
 rm /data/local/tmp/root.sh
 
 echo "[?] Now open the SuperSU app and update the binaries!"
-echo "[?] Exiting in 10 seconds..."
-sleep 10
 exit 0
