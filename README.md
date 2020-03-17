@@ -5,7 +5,7 @@
 ***WHAT IS THIS?***
 
 This tool, will automatically root your 64 bit MediaTek based device using the mtk-su exploit (CVE-2020-0069) created/found by diplomatic@xda.
-It will automatically check if your device has dm-verity, the arch, the android version, etc... And will push the required files to obtain full ROOT (Android 5.0 - 7.1) or bootless ROOT in any Android Version (Feature coming soon...).
+It will automatically check if your device has dm-verity, the arch, the android version, etc... And will push the required files to obtain full ROOT (Android 5.0 - 7.1) or bootless ROOT in any Android Version.
 
 NOTE: It can also root a few 32 bit platforms such as mt6580 & mt6595.
 
@@ -21,7 +21,7 @@ NOTE: It can also root a few 32 bit platforms such as mt6580 & mt6595.
 * Root the device. (System-mode using SuperSU).
 * Spawn a root shell.
 * Unroot the device. (Deleting su files and restoring original app_processes).
-* Bootless root for devices with dm-verity enabled(Soon...).
+* Bootless root for devices with dm-verity enabled.
 
 ***DOWNLOAD:***
 * Downloads: https://github.com/R0rt1z2/AutomatedRoot/releases (Latest release).
@@ -31,9 +31,9 @@ NOTE: It can also root a few 32 bit platforms such as mt6580 & mt6595.
 * Use [this template](https://github.com/R0rt1z2/AutomatedRoot/blob/master/files/images/bugreport_template.md) to help me to find out what's going on. 
 
 ***SPECIAL THANKS TO:***
-* diplomatic for create his MTK-SU!
-* uniminin for the help with the script.
-* t0x1cSH for the little help with the script.
+* diplomatic for create his MTK-SU and the bootless root method!
+* RYO Software for the Initd Support App!
+* t0x1cSH and uniminin for the help with the script.
 
 ***LICENSE:***
 * This tool is licensed under the GNU General Public License.
