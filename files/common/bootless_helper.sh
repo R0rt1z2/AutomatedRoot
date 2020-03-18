@@ -41,7 +41,7 @@ do
    RES=$(ls /data/local/tmp/ | grep done)
    RES=$?
    if [ "$RES" -eq 0 ]; then
-      echo "[+] suboot script ran succsusfully!\n"
+      echo "[+] suboot script ran successfully!\n"
 	  rm /data/local/tmp/done
 	  logcat -c
 	  break
