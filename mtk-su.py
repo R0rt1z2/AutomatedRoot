@@ -20,6 +20,9 @@ def get_var_from_system(command):
 def push_file(file, target):
         os.system("adb push {} {}".format(file, target))
 
+def install_apk(apk):
+        os.system("adb install {}".format(apk))
+
 def get_prop(prop, name):
         name = Popen(f'adb shell getprop {prop}', shell=True, bufsize=64, stdin=PIPE, stdout=PIPE, stderr=STDOUT, close_fds=True).stdout.read().strip().decode('utf-8')
         return name
@@ -233,21 +236,21 @@ while True:
                   Popen('adb shell pm clear com.ryosoftware.initd', shell=True, bufsize=64, stdin=PIPE, stdout=PIPE, stderr=STDOUT, close_fds=True).stdout.read().strip().decode('utf-8')
               else:
                   print("\n[?] Installing Initd Support app...\n")
-                  call("adb install files/common/Initd.apk")
+                  install_apk("files/common/Initd.apk")
 
               if "magisk" in packages:
                   print("[?] Magisk Manager is already installed. Skip the install...\n")
               else:
                   print("[?] Installing Magisk Manager...\n")
-                  call("adb install files/common/Magisk.apk")
+                  install_apk("files/common/Magisk.apk")
 
               print("[?] Pushing the helper...\n")
               push_file("files/common/bootless_helper.sh", "/data/local/tmp/")
-              call("adb shell chmod 755 /data/local/tmp/bootless_helper.sh")
+              call("adb shell chmod 755 /data/local/tmp/bootless_helper.sh", shell=True)
 
               print("\n[?] Calling the helper...")
-              call("adb shell dos2unix /data/local/tmp/bootless_helper.sh")
-              call("adb shell /data/local/tmp/bootless_helper.sh")
+              call("adb shell dos2unix /data/local/tmp/bootless_helper.sh", shell=True)
+              call("adb shell /data/local/tmp/bootless_helper.sh", shell=True)
               print("[?] Exiting in 10 seconds...\n")
               time.sleep(10)
               input("[?] Press any key to continue...\n")
