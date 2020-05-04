@@ -16,6 +16,7 @@ NOTE: It can also root a few 32 bit platforms such as mt6580 & mt6595.
 ***HOW TO USE THE TOOL?***
 * Windows Users: double-Click on MTK-SU.bat.
 * Linux Users: ```$ chmod a+x MTK-SU.sh && ./MTK-SU.sh```
+* NOTE: You must download the mtk-su binary from [XDA Thread](https://forum.xda-developers.com/android/development/amazing-temp-root-mediatek-armv8-t3922213) and place it to it's corresponding folders (arm one to files/arm/ and arm64 one to files/arm64/).
 
 ***AVAILABLE OPTIONS:***
 * Root the device. (System-mode using SuperSU).

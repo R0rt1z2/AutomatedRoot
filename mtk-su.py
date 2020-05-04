@@ -1,4 +1,5 @@
 import os
+import os.path
 import subprocess
 import time
 from subprocess import Popen, PIPE, DEVNULL, STDOUT, check_call, call
@@ -41,6 +42,13 @@ def check_devices():
                      print("\n\n[!] ERROR: Device is unauthorized or offline!\n")
                      sys.exit(1)
                  break
+
+def check_binary():
+         if os.path.exists("files/arm/mtk-su") and os.path.exists("files/arm64/mtk-su"):
+             pass
+         else:
+             print("[!] Could not find mtk-su binaries. Be sure to download them from the XDA thread and put them in the corresponding folder!\n")
+             exit(1)
 
 def make_line(title, subtitle, margin):
          line_len = len("| {}: {}".format(title, subtitle))
@@ -103,6 +111,7 @@ while True:
              os.system(clean)
              print_banner()
              check_devices()
+             check_binary()
 
              print("[?] Getting device information...")
 
@@ -151,6 +160,8 @@ while True:
                os.system(clean)
                print_banner()
                check_devices()
+               check_binary()
+               
                Popen('adb shell mkdir /data/local/tmp/arm', shell=True, bufsize=64, stdin=PIPE, stdout=PIPE, stderr=STDOUT, close_fds=True).stdout.read().strip().decode('utf-8')
                Popen('adb shell mkdir /data/local/tmp/arm64', shell=True, bufsize=64, stdin=PIPE, stdout=PIPE, stderr=STDOUT, close_fds=True).stdout.read().strip().decode('utf-8')
                arch = get_prop("ro.product.cpu.abi", "arch")
@@ -173,6 +184,8 @@ while True:
                os.system(clean)
                print_banner()
                check_devices()
+               check_binary()
+
                print("\n[?] Getting device information...")
 
                print_device_info()
@@ -204,6 +217,8 @@ while True:
               os.system(clean)
               print_banner()
               check_devices()
+              check_binary()
+
               print("[?] Bootless Root Enabler")
  
               print("\n[?] Getting device information...")
@@ -256,7 +271,6 @@ while True:
               input("[?] Press any key to continue...\n")
               os.system(clean)
               break
-
 
         else:
                input("\n[!] {}: invalid option. Press any key to continue...\n".format(option))
