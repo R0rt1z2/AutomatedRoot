@@ -25,31 +25,31 @@ if [ "$HAS_VENDOR" -eq "YES" ]; then
    echo "[?] Checking fstab in vendor..."
    VERIFY=$(cat /vendor/etc/fstab* 2>/dev/null | grep verify | grep system)
    if [ $? -eq 0 ]; then
-       echo "[-] DM-Verity is present in this device. Abort!"
+       echo "[-] DM-Verity it's present on this device. Abort!"
        exit 1
    else
-       echo "[!] Did not found verify flag in vendor. Attempt to search in initramfs."
+       echo "[!] Couldn't find verify flag in vendor. Searching in initramfs."
        VERIFY=$(cat /fstab* 2>/dev/null | grep verify | grep system)
        if [ $? -eq 0 ]; then
-           echo "[-] DM-Verity is present in this device. Abort!"
+           echo "[-] DM-Verity it's present on this device. Abort!"
            exit 1
        fi
-       echo "[?] DM-Verity is not enabled in this device. Continue..."
+       echo "[?] DM-Verity it's not enabled on this device. Continue..."
    fi
 else
    echo "[?] Checking fstab in initramfs..."
    VERIFY=$(cat /fstab* 2>/dev/null | grep verify | grep system)
    if [ $? -eq 0 ]; then
-        echo "[-] DM-Verity is present in this device. Abort!"
+        echo "[-] DM-Verity it's present on this device. Abort!"
         exit 1
    fi
-   echo "[?] DM-Verity is not enabled in this device. Continue..."
+   echo "[?] DM-Verity it's not enabled in this device. Continue..."
 fi
 
 # Mount system read-write.
 mount -o remount -rw /system
 
-# Backup stock app_process.
+# Backup original app_process.
 cp /system/bin/app_process /system/bin/app_process_original
 cp /system/bin/app_process32 /system/bin/app_process_original32
 if [ "$ARCH" == "arm64-v8a" ]; then

@@ -52,8 +52,5 @@ if [ "$ARCH" == "arm64-v8a" ]; then
    chcon u:object_r:zygote_exec:s0 /system/bin/app_process64
 fi
 
-# Mount system as read-only.
-mount -o remount -ro /system
-
 echo "[+] Unroot complete!"
 exit
