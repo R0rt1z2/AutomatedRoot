@@ -229,7 +229,7 @@ while True:
         elif "abi" in arch:
             push_file("files/arm/mtk-su", "/sdcard/init.d/bin/")
             push_file("files/common/magiskinit", "/sdcard/init.d/bin/")
-            push_file("files/common/suboot.sh", "/sdcard/init.d/")
+            push_file("files/common/magisk-boot.sh", "/sdcard/init.d/")
 
         packages = get_var_from_system("adb shell pm list packages")
 
