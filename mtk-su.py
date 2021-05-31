@@ -70,10 +70,6 @@ def check_devices():
                 sys.exit(1)
             break
 
-def check_binary():
-    if not os.path.exists("files/arm/mtk-su") and not os.path.exists("files/arm64/mtk-su"):
-        print("[!] Could not find mtk-su binaries. Make sure to download them from the XDA thread and put them in the corresponding folder!\n")
-
 def mkline(title, subtitle, margin):
     line_len = len("| {}: {}".format(title, subtitle))
     to_add = margin - line_len - 1
@@ -120,6 +116,11 @@ def show_menu():
     print("\n  3 - Bootless Root")
     print("\n  4 - Exit")
 
+if not os.path.exists("files/arm/mtk-su") or not os.path.exists("files/arm64/mtk-su"):
+    print("[!] Could not find mtk-su binaries. Make sure to download them from the XDA thread and put them in the corresponding folder!")
+    input("[?] Press any key to continue...")
+    sys.exit(1)
+
 while True:
     show_menu()
 
@@ -129,7 +130,6 @@ while True:
         os.system(clean)
         print_banner()
         check_devices()
-        check_binary()
 
         print("[?] Getting device information...")
         print_device_info()
@@ -172,7 +172,6 @@ while True:
         os.system(clean)
         print_banner()
         check_devices()
-        check_binary()
 
         print("\n[?] Getting device information...")
 
@@ -195,7 +194,6 @@ while True:
         os.system(clean)
         print_banner()
         check_devices()
-        check_binary()
 
         print("[?] Bootless Root Enabler")
  
