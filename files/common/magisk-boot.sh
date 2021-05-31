@@ -1,17 +1,16 @@
 #!/system/bin/sh
 #
-# Updated: Dec 26, 2019
+# Updated: Mar 31, 2020
 # by diplomatic
 #
 # This script sets up bootless root with Magisk on MediaTek Android devices.
-# It uses mtk-su, the temporary root tool for MediaTek ARMv8 chips. Currently
-# this only supports Magisk up to 18.1. Must be run from the app 
-# 'init.d scripts support' by RYO Software. Put this file into
+# It uses mtk-su, the temporary root tool for MediaTek ARMv8 chips. Must be run
+# from the app 'init.d scripts support' by RYO Software. Put this file into
 # /storage/emulated/0/init.d along with mtk-su and magiskinit into .../init.d/bin
 # Point the app to run sh scripts from /storage/emulated/0/init.d at boot time.
 #
 # WARNING: DO NOT UPDATE MAGISK THROUGH MAGISK MANAGER OR YOU WILL BRICK YOUR
-#          DEVICE ON A LOCKED BOOTLOADER
+#		   DEVICE ON A LOCKED BOOTLOADER
 #
 
 HOMEDIR=/data/data/com.ryosoftware.initd/files/bin
@@ -20,41 +19,29 @@ SRCDIR=/storage/emulated/0/init.d
 SU_MINISCRIPT='
 # Magisk function to find boot partition and prevent the installer from finding
 # it again
-toupper() {
-  echo "$@" | tr "[:lower:]" "[:upper:]"
-}
-
-grep_prop() {
-  local REGEX="s/^$1=//p"
-  shift
-  local FILES=$@
-  sed -n "$REGEX" $FILES 2>/dev/null | head -n 1
-}
-
 find_block() {
   for BLOCK in "$@"; do
-    DEVICES=`find /dev/block -type l -iname $BLOCK` 2>/dev/null
+    DEVICES=$(find /dev/block -type l -iname $BLOCK) 2>/dev/null
     for DEVICE in $DEVICES; do
-      if [ -h "$DEVICE" ]; then
-	    cd ${DEVICE%/*}
-	    BASENAME="${DEVICE##*/}"
-	    mv "$BASENAME" ".$BASENAME"
-	    cd -
-	  fi
-	done
+      cd ${DEVICE%/*}
+      local BASENAME="${DEVICE##*/}"
+      mv "$BASENAME" ".$BASENAME"
+      cd -
+    done
   done
   # Fallback by parsing sysfs uevents
-  for uevent in /sys/dev/block/*/uevent; do
-    local PARTNAME=`grep_prop PARTNAME $uevent`
+  typeset -l PARTNAME BLOCK
+  local FILELIST=$(grep -s PARTNAME= /sys/dev/block/*/uevent) 2>/dev/null
+  for uevent in $FILELIST; do
+    local PARTNAME=${uevent##*PARTNAME=}
     for BLOCK in "$@"; do
-      if [ "`toupper $BLOCK`" = "`toupper $PARTNAME`" ]; then
-        #echo /dev/block/$DEVNAME
-        #return 0
-        chmod 0 $uevent
+      if [ "$BLOCK" = "$PARTNAME" ]; then
+        local FNAME=${uevent%:*}
+        chmod 0 $FNAME
       fi
     done
   done
-  return 1
+  return 0
 }
 
 # Root only at this point; hoping selinux is permissive
@@ -63,15 +50,36 @@ if [ $(id -u) != 0 ] || [ "$(getenforce)" != "Permissive" ]; then
 	exit 1
 fi
 
-cd $HOMEDIR
+# Disaster prevention
+SLOT=$(getprop ro.boot.slot_suffix)
+find_block boot$SLOT
 
-# Patch selinux policy -- error messages here are normal
+cd $HOMEDIR || { setenforce 1; exit 1; }
+
+# Patch selinux policy
 ./magiskpolicy --live --magisk "allow magisk * * *"
 if [ ! -f /sbin/.init-stamp ]; then
-	# Create tmpfs /xbin overlay
-	./magisk --startup
+	# Set up /root links to /sbin files
+	mount | grep -qF rootfs
+	have_rootfs=$?
+	if [ $have_rootfs -eq 0 ]; then
+		mount -o rw,remount /
+		mkdir -p /root
+		chmod 750 /root
+		if ! ln /sbin/* /root; then
+			echo "Error making /sbin hardlinks" >&2
+			setenforce 1
+			exit 1
+		fi
+		mount -o ro,remount /
+	fi
+	# Create tmpfs /sbin overlay
+	# This may crash on system-as-root with no /root directory
+	./magisk -c >&2
 
-	if [ ! -f /sbin/magiskinit ] || [ ! -f /sbin/magisk.bin ]; then
+	touch /sbin/.init-stamp
+
+	if [ ! -f /sbin/magiskinit ] || [ ! -f /sbin/magisk ]; then
 		echo "Bad /sbin mount?" >&2
 		setenforce 1
 		exit 1
@@ -80,20 +88,28 @@ if [ ! -f /sbin/.init-stamp ]; then
 	# Copy binaries
 	cp magiskinit /sbin/
 
+	if [ $have_rootfs -ne 0 ]; then
+		mkdir /sbin/.magisk/mirror/system_root
+		block=$(mount | grep " / " | cut -d\  -f1)
+		[ $block = "/dev/root" ] && block=/dev/block/dm-0
+		mount -o ro $block /sbin/.magisk/mirror/system_root
+		for file in /sbin/.magisk/mirror/system_root/sbin/*; do
+			if [ -L $file ]; then
+			  cp -a $file /sbin/
+			else
+			  cp -ps $file /sbin/${file##*/}
+			fi
+		done
+	fi
+
 	export PATH=/sbin:$PATH
-	magiskinit -x magisk /sbin/magisk.bin
 
 	# Finish startup calls
 	magisk --post-fs-data
+	sleep 1		# hack to prevent race with later service calls
 	magisk --service
 	magisk --boot-complete
-
-	touch /sbin/.init-stamp
 fi
-
-# Disaster prevention
-SLOT=$(getprop ro.boot.slot_suffix)
-find_block boot$SLOT
 
 setenforce 1
 '
@@ -105,10 +121,8 @@ if ! cmp -s $SRCDIR/bin/magiskinit magiskinit; then
 	cp $SRCDIR/bin/magiskinit ./
 	chmod 700 magiskinit
 
-	./magiskinit -x magisk ./magisk || exit 1
-	chmod 700 magisk
-
 	ln -fs magiskinit magiskpolicy
+	ln -fs magiskinit magisk
 fi
 
 if ! cmp -s $SRCDIR/bin/mtk-su mtk-su; then
@@ -125,9 +139,6 @@ export HOMEDIR
 echo "$SU_MINISCRIPT" | ./mtk-su -Z $newctx
 
 RESULT=$?
-
-echo "EXIT CODE: $RESULT"
-
 logcat -c
 
 if [ $RESULT -eq 0 ]; then
