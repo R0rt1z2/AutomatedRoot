@@ -37,5 +37,5 @@ Root MediaTek arm64 devices using `mtk-su` exploit (**CVE-2020-0069**).
 ## License
 * This tool is licensed under the GNU (v3) General Public License. See `LICENSE` for more details.
 * `files/common/Initd.apk` is property of RYO Software.
-* `files/common/Mafisk.apk` is property of topjohnwu.
+* `files/common/Magisk.apk` is property of topjohnwu.
 * `files/common/SuperSU.apk` and `files/arm[64]` are property of chainfire.
