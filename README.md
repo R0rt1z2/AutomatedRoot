@@ -42,6 +42,11 @@ Root MediaTek arm64 devices using `mtk-su` exploit (**CVE-2020-0069**).
 * `files/common/Magisk.apk` is property of topjohnwu.
 * `files/common/SuperSU.apk` and `files/arm[64]` are property of chainfire.
 
+## Links of interest
+* https://blog.quarkslab.com/cve-2020-0069-autopsy-of-the-most-stable-mediatek-rootkit.html
+* https://source.android.com/security/bulletin/2020-03-01
+* https://www.xda-developers.com/mediatek-su-rootkit-exploit/
+
 ## Repo Info
 ![Github Stars](https://img.shields.io/github/stars/R0rt1z2/AutomatedRoot?style=social)
 ![Github Watchers](https://img.shields.io/github/watchers/R0rt1z2/AutomatedRoot?style=social)
