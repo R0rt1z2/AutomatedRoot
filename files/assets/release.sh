@@ -1,6 +1,6 @@
 #!/bin/bash
 
-cd ../
+cd ../../
 
 rm -rf release >/dev/null 2>&1
 
@@ -12,7 +12,7 @@ fi
 mkdir release
 mkdir release/files
 
-cp files/{MTK-SU.bat,MTK-SU.sh} release/
+cp files/assets/{MTK-SU.bat,MTK-SU.sh} release/
 chmod a+x release/*.sh
 
 cp -r files/{arm,arm64,common} release/files/
