@@ -2,6 +2,7 @@
 ![GitHub](https://img.shields.io/github/license/R0rt1z2/AutomatedRoot)
 ![GitHub release (latest by date including pre-releases)](https://img.shields.io/github/v/release/R0rt1z2/AutomatedRoot?include_prereleases)
 ![GitHub All Releases](https://img.shields.io/github/downloads/R0rt1z2/AutomatedRoot/total)
+[![](https://img.shields.io/badge/maintained-yes-purple.svg)](https://github.com/R0rt1z2/AutomatedRoot)
 
 Root MediaTek arm64 devices using `mtk-su` exploit (**CVE-2020-0069**).
 
