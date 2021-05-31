@@ -3,6 +3,8 @@
 ![GitHub release (latest by date including pre-releases)](https://img.shields.io/github/v/release/R0rt1z2/AutomatedRoot?include_prereleases)
 ![GitHub All Releases](https://img.shields.io/github/downloads/R0rt1z2/AutomatedRoot/total)
 [![](https://img.shields.io/badge/maintained-yes-purple.svg)](https://github.com/R0rt1z2/AutomatedRoot)
+![GitHub Issues](https://img.shields.io/bitbucket/issues-raw/R0rt1z2/AutomatedRoot?color=red)
+![Github Contributors](https://img.shields.io/github/contributors/R0rt1z2/AutomatedRoot)
 
 Root MediaTek arm64 devices using `mtk-su` exploit (**CVE-2020-0069**).
 
@@ -39,3 +41,8 @@ Root MediaTek arm64 devices using `mtk-su` exploit (**CVE-2020-0069**).
 * `files/common/Initd.apk` is property of RYO Software.
 * `files/common/Magisk.apk` is property of topjohnwu.
 * `files/common/SuperSU.apk` and `files/arm[64]` are property of chainfire.
+
+## Repo Info
+![Github Stars](https://img.shields.io/github/stars/R0rt1z2/AutomatedRoot?style=social)
+![Github Watchers](https://img.shields.io/github/watchers/R0rt1z2/AutomatedRoot?style=social)
+![Github Forks](https://img.shields.io/github/forks/R0rt1z2/AutomatedRoot?style=social)
