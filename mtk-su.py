@@ -96,7 +96,7 @@ def print_device_info():
     print(margin)
 
 def check_platform(platform):
-    if platform[:4] not in CPU_REGEX:
+    if platform[:4] not in CPU_REGEX or platform not in CPU_REGEX:
         print("[!] Unsupported CPU! mtk-su is not compatible with {}!\n".format(platform))
         input("[?] Press any key to continue...\n")
         sys.exit(1)
