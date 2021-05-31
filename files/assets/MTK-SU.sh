@@ -1,1 +1,1 @@
-sudo python3 mtk-su.py
+python3 mtk-su.py
