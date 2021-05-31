@@ -4,11 +4,6 @@ cd ../../
 
 rm -rf release >/dev/null 2>&1
 
-if [ ! -f files/arm/mtk-su ] || [ ! -f files/arm64/mtk-su ] ; then
-	echo "Missing mtk-su binaries in files/"
-	exit 1
-fi
-
 mkdir release
 mkdir release/files
 
