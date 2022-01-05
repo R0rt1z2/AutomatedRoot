@@ -138,9 +138,4 @@ newctx=${ctx/%:s0:*/:s0}
 export HOMEDIR
 echo "$SU_MINISCRIPT" | ./mtk-su -Z $newctx
 
-RESULT=$?
-logcat -c
-
-if [ $RESULT -eq 0 ]; then
-   log -p e -t suboot suboot finished
-fi
+log -p e -t suboot "retcode ${?}"
