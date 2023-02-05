@@ -40,10 +40,10 @@ def cmd_handler(client, opt):
 
     logger.log("Send files")
     for file in os.listdir('automated_root/files/common'):
-        dev.push(f'automated_root/files/common/{file}', f'/data/local/tmp/{file}', perms='a+x')
+        dev.push(f'automated_root/files/common/{file}', f'/data/local/tmp/{file}', perms='775')
 
     for file in os.listdir(f'automated_root/files/{dev.arch}'):
-        dev.push(f'automated_root/files/{dev.arch}/{file}', f'/data/local/tmp/{dev.arch}/{file}', perms='a+x')
+        dev.push(f'automated_root/files/{dev.arch}/{file}', f'/data/local/tmp/{dev.arch}/{file}', perms='775')
 
     with Switch(opt) as s:
         if s.case(1):
